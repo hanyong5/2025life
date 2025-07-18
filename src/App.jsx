@@ -35,7 +35,19 @@ function App() {
       <div className="max-w-4xl mx-auto">
         {cgntvData.length > 0 ? (
           <div className="bg-white rounded-lg shadow-lg p-6">
-            <video
+            <iframe
+              src={currentVideoUrl}
+              className="w-full rounded-lg shadow-md"
+              style={{
+                aspectRatio: "16 / 9",
+                width: "100%",
+                border: "none",
+                maxHeight: "70vh",
+              }}
+              title="CGNTV 영상 재생"
+              sandbox="allow-scripts allow-same-origin allow-forms"
+            />
+            {/* <video
               src={currentVideoUrl}
               className="w-full rounded-lg shadow-md"
               style={{
@@ -49,7 +61,7 @@ function App() {
               autoPlay
             >
               브라우저가 video 태그를 지원하지 않습니다.
-            </video>
+            </video> */}
             <div className="pt-5"></div>
             {/* 영상 정보 */}
             <div className="mb-6 text-center">
