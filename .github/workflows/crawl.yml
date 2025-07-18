@@ -1,0 +1,86 @@
+name: CGNTV Crawl Daily
+
+on:
+  schedule:
+    # 매일 새벽 1시 (한국 시간)에 실행
+    # UTC 기준으로는 매일 오후 4시 (16:00)
+    - cron: "0 16 * * *"
+  workflow_dispatch: # 수동 실행도 가능하도록
+  push:
+    branches:
+      - main # main 브랜치에 push할 때 실행
+    paths:
+      - "python.py" # python.py 파일이 변경될 때만 실행
+      - "requirements.txt" # requirements.txt 파일이 변경될 때만 실행
+      - ".github/workflows/crawl.yml" # 워크플로우 파일이 변경될 때만 실행
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget unzip xvfb
+
+      - name: Install Chrome
+        run: |
+          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Create data directory
+        run: |
+          mkdir -p src/data
+
+      - name: Run crawler
+        run: |
+          python python.py
+
+      - name: Check if result file exists
+        id: check_file
+        run: |
+          if [ -f "src/data/cgntv_crawl_result.json" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "File size: $(wc -c < src/data/cgntv_crawl_result.json) bytes"
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push if changes
+        if: steps.check_file.outputs.exists == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add src/data/cgntv_crawl_result.json
+          git diff --quiet && git diff --staged --quiet || git commit -m "Auto-update crawl result - $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+          git push
+
+      - name: Create summary
+        if: always()
+        run: |
+          echo "## CGNTV Crawl Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **Time**: $(date -u)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+          if [ -f "src/data/cgntv_crawl_result.json" ]; then
+            echo "- **Result**: ✅ Crawl completed successfully" >> $GITHUB_STEP_SUMMARY
+            echo "- **File**: src/data/cgntv_crawl_result.json" >> $GITHUB_STEP_SUMMARY
+            echo "- **Size**: $(wc -c < src/data/cgntv_crawl_result.json) bytes" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- **Result**: ❌ Crawl failed or no result file" >> $GITHUB_STEP_SUMMARY
+          fi

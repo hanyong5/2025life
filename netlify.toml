@@ -1,0 +1,8 @@
+[build]
+  command = "npm run build"
+  publish = "dist" # Vite는 기본적으로 dist 폴더를 생성
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
