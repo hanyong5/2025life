@@ -17,6 +17,12 @@ function App() {
       .catch(() => setLoading(false));
   }, []);
 
+  const openVideoInNewTab = () => {
+    if (currentVideoUrl) {
+      window.open(currentVideoUrl, "_blank");
+    }
+  };
+
   if (loading) return <div className="p-8 text-center">로딩 중...</div>;
   if (!cgntvData.length)
     return <div className="p-8 text-center">데이터 없음</div>;
@@ -32,7 +38,7 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-100 p-4">
       <div className="max-w-4xl mx-auto">
-        <video
+        {/* <video
           src={currentVideoUrl}
           className="w-full rounded-lg shadow-md"
           style={{
@@ -46,19 +52,25 @@ function App() {
           autoPlay
         >
           브라우저가 video 태그를 지원하지 않습니다.
-        </video>
+        </video> */}
+        <button
+          onClick={openVideoInNewTab}
+          className="bg-blue-500 text-white px-4 py-2 rounded-md w-full"
+        >
+          새 탭에서 영상 열기
+        </button>
         <div className="pt-5"></div>
         <div className="mb-6 text-center">
           <h2 className="text-xl font-semibold mb-2 text-gray-800">
             {currentVideo.pTitle}
           </h2>
-          <p className="text-sm text-gray-600 mb-2">
+          <p className="text-xl text-gray-600 mb-2 font-bold ">
             {currentVideo.content_date?.date}{" "}
             {currentVideo.content_date?.weekday_kr}
           </p>
         </div>
         {/* 영상 목록 */}
-        <div className="mb-6">
+        {/* <div className="mb-6">
           <h3 className="text-lg font-semibold mb-3 text-gray-800">
             영상 목록 ({cgntvData.length}개)
           </h3>
@@ -80,7 +92,7 @@ function App() {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
         {/* 영상 설명 */}
         {currentVideo.contArea_content && (
           <div className="mt-6 p-4 bg-gray-50 rounded-lg">
