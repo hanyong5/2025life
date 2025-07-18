@@ -423,6 +423,6 @@ def save_result(result, filename=None):
 
 if __name__ == "__main__":
     print("CGNTV 크롤러 시작...")
-    result = crawl_cgntv()
+    result = crawl_with_requests()
     save_result(result)
     print("크롤링 완료!")
