@@ -115,9 +115,9 @@ def crawl_with_requests():
             "extracted_video_id": video_id,
             "player_url": player_url,
             "pTitle": ptitle_text,
-            "contArea_content": str(cont_content_element) if cont_content_element else None,
-            "vod_data": vod_data,
-            "content_date": content_date,
+            "contArea_content": str(cont_content_element) if cont_content_element else "",
+            "vod_data": vod_data if vod_data else "",
+            "content_date": content_date if content_date else {},
             "crawled_at": datetime.now().isoformat()
         }
         
@@ -362,6 +362,9 @@ def crawl_cgntv():
                     "extracted_video_id": video_id,
                     "player_url": player_url,
                     "pTitle": ptitle_text,
+                    "contArea_content": "", # 기본값 추가
+                    "vod_data": "", # 기본값 추가
+                    "content_date": {}, # 기본값 추가
                     "crawled_at": datetime.now().isoformat()
                 }
                 
@@ -388,8 +391,8 @@ def save_result(result, filename=None):
         import os
         from datetime import datetime
         
-        # src/data 폴더 생성
-        data_dir = "src/data"
+        # data 폴더 생성
+        data_dir = "data"
         if not os.path.exists(data_dir):
             os.makedirs(data_dir)
         
