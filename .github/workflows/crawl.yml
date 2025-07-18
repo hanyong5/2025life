@@ -69,7 +69,7 @@ jobs:
           git config --local user.name "hanyong5"
           git add src/data/cgntv_crawl_result.json
           git diff --quiet && git diff --staged --quiet || git commit -m "Auto-update crawl result - $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
-          git push https://x-access-token:${{ secrets.PERSONAL_TOKEN }}@github.com/hanyong5/2025life.git
+          git push https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/hanyong5/2025life.git
 
       - name: Create summary
         if: always()
