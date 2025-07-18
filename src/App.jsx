@@ -45,7 +45,6 @@ function App() {
                 maxHeight: "70vh",
               }}
               title="CGNTV 영상 재생"
-              sandbox="allow-scripts allow-same-origin allow-forms"
             />
             {/* <video
               src={currentVideoUrl}
