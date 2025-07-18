@@ -17,6 +17,14 @@ function App() {
       .catch(() => setLoading(false));
   }, []);
 
+  const currentVideo = cgntvData[currentVideoIndex];
+  const currentVideoUrl = currentVideo?.vod_data?.startsWith("http")
+    ? currentVideo.vod_data
+    : currentVideo?.vod_data
+    ? (currentVideo.vod_data.startsWith("//") ? "http:" : "") +
+      currentVideo.vod_data
+    : "";
+
   const openVideoInNewTab = () => {
     if (currentVideoUrl) {
       window.open(currentVideoUrl, "_blank");
@@ -27,32 +35,18 @@ function App() {
   if (!cgntvData.length)
     return <div className="p-8 text-center">데이터 없음</div>;
 
-  const currentVideo = cgntvData[currentVideoIndex];
-  const currentVideoUrl = currentVideo?.vod_data?.startsWith("http")
-    ? currentVideo.vod_data
-    : currentVideo?.vod_data
-    ? (currentVideo.vod_data.startsWith("//") ? "http:" : "") +
-      currentVideo.vod_data
-    : "";
-
   return (
     <div className="min-h-screen bg-gray-100 p-4">
       <div className="max-w-4xl mx-auto">
-        {/* <video
-          src={currentVideoUrl}
-          className="w-full rounded-lg shadow-md"
-          style={{
-            aspectRatio: "16 / 9",
-            width: "100%",
-            border: "none",
-            maxHeight: "70vh",
-          }}
-          title="CGNTV 영상 재생"
-          controls
-          autoPlay
-        >
-          브라우저가 video 태그를 지원하지 않습니다.
-        </video> */}
+        {/* 앱 타이틀/로고/설명 */}
+
+        {/* 오프라인 안내 */}
+        {!navigator.onLine && (
+          <div className="bg-yellow-100 text-yellow-800 p-2 text-center rounded mb-4">
+            오프라인 상태입니다. 저장된 말씀만 볼 수 있습니다.
+          </div>
+        )}
+        {/* 영상 버튼 */}
         <button
           onClick={openVideoInNewTab}
           className="bg-blue-500 text-white px-4 py-2 rounded-md w-full"
@@ -69,30 +63,6 @@ function App() {
             {currentVideo.content_date?.weekday_kr}
           </p>
         </div>
-        {/* 영상 목록 */}
-        {/* <div className="mb-6">
-          <h3 className="text-lg font-semibold mb-3 text-gray-800">
-            영상 목록 ({cgntvData.length}개)
-          </h3>
-          <div className="space-y-2">
-            {cgntvData.map((video, index) => (
-              <div
-                key={index}
-                className={`p-3 rounded-lg cursor-pointer transition-colors ${
-                  index === currentVideoIndex
-                    ? "bg-blue-100 border-l-4 border-blue-500"
-                    : "bg-gray-50 hover:bg-gray-100"
-                }`}
-                onClick={() => setCurrentVideoIndex(index)}
-              >
-                <h4 className="font-medium text-gray-800">{video.pTitle}</h4>
-                <p className="text-sm text-gray-600">
-                  {video.content_date?.date} {video.content_date?.weekday_kr}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div> */}
         {/* 영상 설명 */}
         {currentVideo.contArea_content && (
           <div className="mt-6 p-4 bg-gray-50 rounded-lg">
@@ -100,7 +70,7 @@ function App() {
               오늘의 큐티
             </h3>
             <div
-              className="prose prose-sm max-w-none"
+              className="prose prose-sm max-w-none text-xl"
               dangerouslySetInnerHTML={{
                 __html: currentVideo.contArea_content,
               }}
