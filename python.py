@@ -85,8 +85,8 @@ def crawl_with_requests():
         player_soup = BeautifulSoup(player_response.content, 'html.parser')
         
         # HTML 내용을 파일로 저장 (디버깅용)
-        with open("player_soup.txt", "w", encoding="utf-8") as f:
-            f.write(str(player_soup))
+        # with open("player_soup.txt", "w", encoding="utf-8") as f:
+        #     f.write(str(player_soup))
         
         # pTitle 요소 찾기
         ptitle_element = player_soup.find(id="pTitle")
@@ -100,7 +100,7 @@ def crawl_with_requests():
         cont_content_element = None
         if cont_area_element:
             cont_content_element = cont_area_element.find(class_="cont")
-            print("contArea.cont 요소:", cont_content_element)
+            
         
         # JavaScript에서 VOD 객체 추출
         vod_data = extract_vod_data_from_html(player_response.text)
@@ -115,9 +115,9 @@ def crawl_with_requests():
             "extracted_video_id": video_id,
             "player_url": player_url,
             "pTitle": ptitle_text,
-            "contArea_content": str(cont_content_element) if cont_content_element else "",
-            "vod_data": vod_data if vod_data else "",
-            "content_date": content_date if content_date else {},
+            "contArea_content": str(cont_content_element),
+            "vod_data": vod_data,
+            "content_date": content_date,
             "crawled_at": datetime.now().isoformat()
         }
         
