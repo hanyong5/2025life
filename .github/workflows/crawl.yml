@@ -65,8 +65,8 @@ jobs:
       - name: Commit and push if changes
         if: steps.check_file.outputs.exists == 'true'
         run: |
-          git config --local user.email "hanyong5@naver.com"
-          git config --local user.name "hanyong5"
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add src/data/cgntv_crawl_result.json
           git diff --quiet && git diff --staged --quiet || git commit -m "Auto-update crawl result - $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
           git push https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/hanyong5/2025life.git
