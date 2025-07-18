@@ -47,10 +47,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Create data directory
-        run: |
-          mkdir -p src/data
-
       - name: Run crawler
         run: |
           python python.py
@@ -58,9 +54,9 @@ jobs:
       - name: Check if result file exists
         id: check_file
         run: |
-          if [ -f "src/data/cgntv_crawl_result.json" ]; then
+          if [ -f "cgntv_crawl_result.json" ]; then
             echo "exists=true" >> $GITHUB_OUTPUT
-            echo "File size: $(wc -c < src/data/cgntv_crawl_result.json) bytes"
+            echo "File size: $(wc -c < cgntv_crawl_result.json) bytes"
           else
             echo "exists=false" >> $GITHUB_OUTPUT
           fi
@@ -70,7 +66,7 @@ jobs:
         run: |
           git config --local user.email "hanyong5@naver.com"
           git config --local user.name "hanyong5"
-          git add src/data/cgntv_crawl_result.json
+          git add cgntv_crawl_result.json
           git diff --quiet && git diff --staged --quiet || git commit -m "Auto-update crawl result - $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
           git push
 
@@ -80,10 +76,10 @@ jobs:
           echo "## CGNTV Crawl Summary" >> $GITHUB_STEP_SUMMARY
           echo "- **Time**: $(date -u)" >> $GITHUB_STEP_SUMMARY
           echo "- **Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
-          if [ -f "src/data/cgntv_crawl_result.json" ]; then
+          if [ -f "cgntv_crawl_result.json" ]; then
             echo "- **Result**: ✅ Crawl completed successfully" >> $GITHUB_STEP_SUMMARY
-            echo "- **File**: src/data/cgntv_crawl_result.json" >> $GITHUB_STEP_SUMMARY
-            echo "- **Size**: $(wc -c < src/data/cgntv_crawl_result.json) bytes" >> $GITHUB_STEP_SUMMARY
+            echo "- **File**: cgntv_crawl_result.json" >> $GITHUB_STEP_SUMMARY
+            echo "- **Size**: $(wc -c < cgntv_crawl_result.json) bytes" >> $GITHUB_STEP_SUMMARY
           else
             echo "- **Result**: ❌ Crawl failed or no result file" >> $GITHUB_STEP_SUMMARY
           fi

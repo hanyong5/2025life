@@ -390,17 +390,11 @@ def save_result(result, filename=None):
     if result:
         import os
         from datetime import datetime
-        
-        # data 폴더 생성
-        data_dir = "data"
-        if not os.path.exists(data_dir):
-            os.makedirs(data_dir)
-        
-        # 파일명을 cgntv_crawl_result.json으로 고정
+
+        # 최상위 폴더에 저장
         filename = "cgntv_crawl_result.json"
-        
-        filepath = os.path.join(data_dir, filename)
-        
+        filepath = filename
+
         # 기존 파일이 있는지 확인
         existing_data = []
         if os.path.exists(filepath):
@@ -411,18 +405,18 @@ def save_result(result, filename=None):
                     existing_data = [existing_data]
             except:
                 existing_data = []
-        
+
         # 새로운 데이터를 맨 앞에 추가
         existing_data.insert(0, result)
-        
+
         # 최대 10개만 유지
         if len(existing_data) > 10:
             existing_data = existing_data[:10]
-        
+
         # 파일에 저장
         with open(filepath, 'w', encoding='utf-8') as f:
             json.dump(existing_data, f, ensure_ascii=False, indent=2)
-        
+
         print(f"결과가 {filepath}에 저장되었습니다. (총 {len(existing_data)}개 항목, 최대 10개 유지)")
     else:
         print("저장할 결과가 없습니다.")
