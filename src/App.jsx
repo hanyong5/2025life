@@ -35,6 +35,7 @@ function App() {
       <div className="max-w-4xl mx-auto">
         {cgntvData.length > 0 ? (
           <div className="bg-white rounded-lg shadow-lg p-6">
+            <button onClick={openVideoInNewTab} className="">새 탭에서 영상 열기</button>
             <iframe
               src={currentVideoUrl}
               className="w-full rounded-lg shadow-md"
