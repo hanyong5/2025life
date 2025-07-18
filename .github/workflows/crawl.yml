@@ -83,3 +83,10 @@ jobs:
           else
             echo "- **Result**: ❌ Crawl failed or no result file" >> $GITHUB_STEP_SUMMARY
           fi
+
+      - name: Upload player_soup.txt as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: player_soup
+          path: player_soup.txt
