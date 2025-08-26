@@ -140,7 +140,7 @@ def extract_vod_data_from_html(html_content):
     """HTML에서 VOD 관련 JavaScript 객체 추출"""
     try:
         # MAQT 패턴의 URL들을 직접 찾기
-        maqt_pattern = r'mod7\.cgntv\.net/_NewMP4/\d+/MAQT\d+\.h\d+x\d+\.mp4'
+        maqt_pattern = r'd9kii4u48qet1\.cloudfront\.net/_NewMP4/\d+/MAQT\d+\.h\d+x\d+\.mp4'
         maqt_matches = re.findall(maqt_pattern, html_content)
         
         if maqt_matches:
